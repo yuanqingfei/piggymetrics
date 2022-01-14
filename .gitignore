@@ -10,7 +10,6 @@
 log/
 target/
 bin/
-**/bin/
 
 # Eclipse
 **/*.project
