@@ -3,7 +3,7 @@ security:
     client:
       clientId: notification-service
       clientSecret: ${NOTIFICATION_SERVICE_PASSWORD}
-      accessTokenUri: http://auth-service:5000/uaa/oauth/token
+      accessTokenUri: http://localhost:5000/uaa/oauth/token
       grant-type: client_credentials
       scope: server
 
@@ -28,9 +28,9 @@ backup:
 spring:
   data:
     mongodb:
-      host: notification-mongodb
+      host: localhost
       username: user
-      password: ${MONGODB_PASSWORD}
+      password: password
       database: piggymetrics
       port: 27017
   mail:
@@ -47,4 +47,4 @@ spring:
             class: javax.net.ssl.SSLSocketFactory
             fallback: false
           ssl:
-            enable: true
+            enable: true             

@@ -1,9 +1,13 @@
 spring:
   application:
-    name: notification-service
+    name: notification-service  
   cloud:
     config:
-      uri: http://config:8888
+      uri: http://localhost:8889
       fail-fast: true
       password: ${CONFIG_SERVICE_PASSWORD}
       username: user
+  main:
+    allow-bean-definition-overriding: true
+
+    
