@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
 
 /**
  * @author cdov
+ * Here is a good article for this: https://developer.okta.com/blog/2018/04/02/client-creds-with-spring-boot
  */
 @Configuration
 @EnableResourceServer
