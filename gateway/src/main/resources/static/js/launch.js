@@ -14,7 +14,7 @@ function requestOauthToken(username, password) {
 	var success = false;
 
 	$.ajax({
-		url: 'uaa/oauth/token',
+		url: 'uaa/oauth2/token',
 		datatype: 'json',
 		type: 'post',
 		headers: {'Authorization': 'Basic YnJvd3Nlcjo='},

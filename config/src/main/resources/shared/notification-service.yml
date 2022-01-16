@@ -12,6 +12,10 @@ server:
     context-path: /notifications
   port: 8000
 
+feign:
+  client:
+    refresh-enabled: true
+
 remind:
   cron: 0 0 0 * * *
   email:

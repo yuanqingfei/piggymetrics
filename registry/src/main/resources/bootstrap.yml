@@ -7,7 +7,7 @@ spring:
       fail-fast: true
       password: ${CONFIG_SERVICE_PASSWORD}
       username: user
-
+   
 eureka:
   instance:
     prefer-ip-address: true

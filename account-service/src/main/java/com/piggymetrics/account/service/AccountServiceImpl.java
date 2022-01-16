@@ -47,9 +47,13 @@ public class AccountServiceImpl implements AccountService {
 
 		Account existing = repository.findByName(user.getUsername());
 		Assert.isNull(existing, "account already exists: " + user.getUsername());
+		
+		log.info("before call auth create user!!!");
 
 		authClient.createUser(user);
 
+		log.info("after call auth create user!!!");
+		
 		Saving saving = new Saving();
 		saving.setAmount(new BigDecimal(0));
 		saving.setCurrency(Currency.getDefault());

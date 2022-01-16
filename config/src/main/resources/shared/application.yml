@@ -2,14 +2,6 @@ logging:
   level:
     org.springframework.security: INFO
 
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 10000
-
 eureka:
   instance:
     prefer-ip-address: true
@@ -25,3 +17,8 @@ security:
 spring:
   rabbitmq:
     host: localhost
+  main:
+    allow-bean-definition-overriding: true
+    allow-circular-references: true        
+
+        
