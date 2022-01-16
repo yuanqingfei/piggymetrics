@@ -1,35 +1,43 @@
 package com.piggymetrics.notification.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.cloud.openfeign.security.OAuth2FeignRequestInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.client.DefaultOAuth2ClientContext;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
-import org.springframework.security.oauth2.client.token.grant.client.ClientCredentialsResourceDetails;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.SecurityFilterChain;
 
-import feign.RequestInterceptor;
-
-/**
- * @author cdov
- */
-@Configuration
-@EnableResourceServer
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+@EnableWebSecurity
+public class ResourceServerConfig {
+	
+	@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+	String jwkSetUri;
+	
+	@Bean
+	JwtDecoder jwtDecoder() {
+		return NimbusJwtDecoder.withJwkSetUri(this.jwkSetUri).build();
+	}
+	
     @Bean
-    @ConfigurationProperties(prefix = "security.oauth2.client")
-    public ClientCredentialsResourceDetails clientCredentialsResourceDetails() {
-        return new ClientCredentialsResourceDetails();
-    }
-    @Bean
-    public RequestInterceptor oauth2FeignRequestInterceptor(){
-        return new OAuth2FeignRequestInterceptor(new DefaultOAuth2ClientContext(), clientCredentialsResourceDetails());
-    }
-
-    @Bean
-    public OAuth2RestTemplate clientCredentialsRestTemplate() {
-        return new OAuth2RestTemplate(clientCredentialsResourceDetails());
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    	http
+		        .httpBasic().disable()  
+		        .formLogin(AbstractHttpConfigurer::disable)  
+		        .csrf(AbstractHttpConfigurer::disable)
+		        .sessionManagement(sessionManagement ->  
+	            	sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  
+				.authorizeHttpRequests((authorize) -> authorize
+					.antMatchers("/", "/demo").permitAll()
+					.antMatchers(HttpMethod.GET, "/notifications/**").hasAuthority("SCOPE_server")
+					.antMatchers(HttpMethod.POST, "/notifications/**").hasAuthority("SCOPE_server")					
+					.anyRequest().authenticated())
+			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+    	
+        return http.build();
     }
 }

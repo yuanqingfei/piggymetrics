@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "account-service")
+import com.piggymetrics.notification.config.FeignClientConfig;
+
+@FeignClient(name = "account-service", configuration = FeignClientConfig.class)
 public interface AccountServiceClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/accounts/{accountName}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -1,25 +1,43 @@
 package com.piggymetrics.statistics.config;
 
-import com.piggymetrics.statistics.service.security.CustomUserInfoTokenServices;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
-import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * @author cdov
- */
-@EnableResourceServer
-@Configuration
-public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Autowired
-    private ResourceServerProperties sso;
-
+@EnableWebSecurity
+public class ResourceServerConfig {
+	
+	@Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+	String jwkSetUri;
+	
+	@Bean
+	JwtDecoder jwtDecoder() {
+		return NimbusJwtDecoder.withJwkSetUri(this.jwkSetUri).build();
+	}
+	
     @Bean
-    public ResourceServerTokenServices tokenServices() {
-        return new CustomUserInfoTokenServices(sso.getUserInfoUri(), sso.getClientId());
+    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    	http
+		        .httpBasic().disable()  
+		        .formLogin(AbstractHttpConfigurer::disable)  
+		        .csrf(AbstractHttpConfigurer::disable)
+		        .sessionManagement(sessionManagement ->  
+	            	sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))  
+				.authorizeHttpRequests((authorize) -> authorize
+					.antMatchers("/", "/demo").permitAll()
+					.antMatchers(HttpMethod.GET, "/statistics/**").hasAuthority("SCOPE_server")
+					.antMatchers(HttpMethod.POST, "/statistics/**").hasAuthority("SCOPE_server")					
+					.anyRequest().authenticated())
+			.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt);
+    	
+        return http.build();
     }
 }

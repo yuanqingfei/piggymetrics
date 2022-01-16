@@ -1,4 +1,4 @@
-package com.piggymetrics.account.config;
+package com.piggymetrics.notification.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

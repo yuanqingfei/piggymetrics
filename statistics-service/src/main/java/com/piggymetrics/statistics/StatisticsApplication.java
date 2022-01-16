@@ -10,14 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.convert.CustomConversions;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 
 import com.piggymetrics.statistics.repository.converter.DataPointIdReaderConverter;
 import com.piggymetrics.statistics.repository.converter.DataPointIdWriterConverter;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableOAuth2Client
 @EnableFeignClients
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class StatisticsApplication {
