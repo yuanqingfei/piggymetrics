@@ -1,0 +1,14 @@
+feign:
+  circuitbreaker:
+    enabled: false
+  compression:
+    request:
+      enabled: true
+      mime-types: application/json
+    response:
+      enabled: true
+  client.config.default:
+    connectTimeout: 1000
+    readTimeout: 60000
+    decode404: false
+        

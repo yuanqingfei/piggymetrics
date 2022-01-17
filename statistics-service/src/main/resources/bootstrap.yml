@@ -2,10 +2,13 @@ spring:
   application:
     name: statistics-service
   cloud:
-    config:
-      uri: http://localhost:8889
-      fail-fast: true
-      password: ${CONFIG_SERVICE_PASSWORD}
-      username: user
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
   main:
-    allow-bean-definition-overriding: true      
+    allow-bean-definition-overriding: true
+    allow-circular-references: true       
+    

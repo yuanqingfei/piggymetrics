@@ -11,15 +11,20 @@
 	<parent>
 		<groupId>com.piggymetrics</groupId>
 		<artifactId>piggymetrics</artifactId>
-		<version>3.0-SNAPSHOT</version>
+		<version>4.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
-<!-- 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-		</dependency> -->
-		
+		<!-- for Nacos -->
+		<dependency>
+			<groupId>com.alibaba.cloud</groupId>
+			<artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+		</dependency>
+	    <dependency>
+	        <groupId>com.alibaba.cloud</groupId>
+	        <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+	    </dependency>
+
 		<!-- Spring Gateway -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -34,10 +39,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter</artifactId>
 		</dependency>		
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-sleuth</artifactId>

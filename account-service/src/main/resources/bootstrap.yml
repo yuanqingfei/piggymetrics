@@ -2,11 +2,20 @@ spring:
   application:
     name: account-service
   cloud:
-    config:
-      uri: http://localhost:8889
-      fail-fast: true
-      password: ${CONFIG_SERVICE_PASSWORD}
-      username: user
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+      config:
+        server-addr: localhost:8848
+        file-extension: yaml
+        ext-config[0]:
+          data-id: log.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        ext-config[1]:
+          data-id: feign.yaml
+          group: DEFAULT_GROUP
+          refresh: true
   main:
     allow-bean-definition-overriding: true
-    allow-circular-references: true    
+    allow-circular-references: true 
